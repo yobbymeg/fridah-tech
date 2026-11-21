@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fridah Online Net — Admin</title>
+<style>
+:root{--bg:#070b14;--panel:#0d1424;--panel2:#111a2e;--line:#1d2a45;--txt:#e8eeff;--mut:#8aa0c8;--acc:#00e5ff;--acc2:#7c4dff;--ok:#00e676;--bad:#ff5c7a;--warn:#ffb74d}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(1200px 600px at 80% -10%,#141b3a 0%,transparent 60%),radial-gradient(900px 500px at -10% 110%,#1a0f2e 0%,transparent 55%),var(--bg);color:var(--txt);font:14px/1.5 "Segoe UI",system-ui,-apple-system,sans-serif;min-height:100vh}
+.wrap{max-width:1180px;margin:0 auto;padding:22px 18px 60px}
+.brand{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.logo{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#00e5ff,#7c4dff);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#04101c;box-shadow:0 0 24px #00e5ff44}
+h1{font-size:21px;letter-spacing:.4px}
+h1 span{color:var(--acc)}
+.sub{color:var(--mut);font-size:12px}
+.card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 10px 30px #0007}
+.gate{max-width:420px;margin:12vh auto 0;text-align:center}
+.gate input{width:100%;margin:14px 0}
+.btn{background:linear-gradient(135deg,var(--acc),var(--acc2));border:none;color:#04101c;font-weight:700;padding:11px 22px;border-radius:12px;cursor:pointer;font-size:14px;transition:.2s;letter-spacing:.3px}
+.btn:hover{filter:brightness(1.12);box-shadow:0 0 18px #00e5ff55}
+.btn.ghost{background:transparent;color:var(--acc);border:1px solid var(--line)}
+.btn.sm{padding:7px 14px;font-size:12px;border-radius:10px}
+input,textarea,select{background:#0a1120;border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:10px 12px;font-size:14px;outline:none;width:100%}
+input:focus,textarea:focus{border-color:var(--acc);box-shadow:0 0 0 2px #00e5ff22}
+.tabs{display:flex;gap:8px;margin:18px 0;flex-wrap:wrap}
+.tab{padding:9px 18px;border-radius:12px;cursor:pointer;color:var(--mut);border:1px solid var(--line);background:var(--panel);font-weight:600;font-size:13px}
+.tab.on{color:#04101c;background:linear-gradient(135deg,var(--acc),var(--acc2));border-color:transparent;box-shadow:0 0 16px #00e5ff44}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:18px}
+.stat{padding:16px;border-radius:14px;background:linear-gradient(160deg,var(--panel2),var(--panel));border:1px solid var(--line)}
+.stat b{font-size:24px;display:block;background:linear-gradient(135deg,var(--acc),#fff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat span{color:var(--mut);font-size:12px;letter-spacing:.5px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{color:var(--mut);text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);font-size:11px;letter-spacing:.8px;text-transform:uppercase}
+td{padding:10px;border-bottom:1px solid #131c30;white-space:nowrap}
+tr:hover td{background:#0d1526}
+.pill{padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700;letter-spacing:.4px}
+.pill.ok{background:#00e67622;color:var(--ok);border:1px solid #00e67644}
+.pill.bad{background:#ff5c7a22;color:var(--bad);border:1px solid #ff5c7a44}
+.pill.wait{background:#ffb74d22;color:var(--warn);border:1px solid #ffb74d44}
+.row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.row>div{flex:1;min-width:200px}
+label{display:block;color:var(--mut);font-size:12px;margin:10px 0 6px;letter-spacing:.5px}
+.live{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--ok);box-shadow:0 0 10px var(--ok);animation:pulse 1.6s infinite;margin-right:7px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.switch{position:relative;width:52px;height:28px;display:inline-block}
+.switch input{display:none}
+.slider{position:absolute;inset:0;background:#23304d;border-radius:99px;cursor:pointer;transition:.25s}
+.slider:before{content:"";position:absolute;width:22px;height:22px;border-radius:50%;background:#fff;top:3px;left:3px;transition:.25s}
+.switch input:checked+.slider{background:linear-gradient(135deg,var(--acc),var(--acc2))}
+.switch input:checked+.slider:before{transform:translateX(24px)}
+.mt{margin-top:14px}.mut{color:var(--mut)}.sml{font-size:12px}
+#msg{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--panel2);border:1px solid var(--line);padding:10px 20px;border-radius:12px;display:none;box-shadow:0 8px 30px #000a;z-index:9}
+.search{max-width:320px;margin-bottom:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:800px){.grid2{grid-template-columns:1fr}}
+h3{margin:16px 0 10px;font-size:15px;color:var(--acc)}
+.tiny{font-size:11px;color:var(--mut)}
+code{background:#0a1120;padding:2px 6px;border-radius:6px;color:var(--acc);font-size:12px}
+</style>
+</head>
+<body>
+<div class="wrap" id="app">
+  <!-- LOGIN GATE -->
+  <div class="gate card" id="gate" style="display:none">
+    <div class="logo" style="margin:0 auto 12px">F</div>
+    <h1>Fridah <span>Admin</span></h1>
+    <p class="sub">Fridah Online Net — control center</p>
+    <input id="pw" type="password" placeholder="Admin password" onkeydown="if(event.key==='Enter')login()">
+    <button class="btn" style="width:100%" onclick="login()">Unlock Console</button>
+    <p class="tiny mt">Default password: <code>Fridah@2026</code> (changeable via ADMIN_PASSWORD env)</p>
+  </div>
+
+  <!-- CONSOLE -->
+  <div id="console" style="display:none">
+    <div class="brand">
+      <div class="logo">F</div>
+      <div style="flex:1">
+        <h1>Fridah <span>Online Net</span> — Admin</h1>
+        <div class="sub" id="srvinfo">fridahyobbytech.onrender.com</div>
+      </div>
+      <button class="btn ghost sm" onclick="logout()">Lock</button>
+    </div>
+    <div class="tabs">
+      <div class="tab on" data-t="dash" onclick="tab('dash')">Dashboard</div>
+      <div class="tab" data-t="users" onclick="tab('users')">Users</div>
+      <div class="tab" data-t="pays" onclick="tab('pays')">Payments <span class="live" id="liveDot" style="display:none"></span></div>
+      <div class="tab" data-t="set" onclick="tab('set')">Settings</div>
+    </div>
+
+    <section id="v-dash">
+      <div class="stats">
+        <div class="stat"><b id="sUsers">–</b><span>TOTAL USERS</span></div>
+        <div class="stat"><b id="sActive">–</b><span>ACTIVE PACKAGES</span></div>
+        <div class="stat"><b id="sRev">–</b><span>REVENUE TODAY (KES)</span></div>
+        <div class="stat"><b id="sPays">–</b><span>PAYMENTS TODAY</span></div>
+        <div class="stat"><b id="sFree">–</b><span>FREE NET TODAY</span></div>
+        <div class="stat"><b id="sRevT">–</b><span>REVENUE TOTAL (KES)</span></div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">Latest Payments</h3>
+        <div style="overflow:auto"><table id="dashPays"><thead><tr><th>Time</th><th>Phone</th><th>Package</th><th>KES</th><th>Status</th><th>Receipt</th></tr></thead><tbody></tbody></table></div>
+      </div>
+    </section>
+
+    <section id="v-users" style="display:none">
+      <input class="search" id="uSearch" placeholder="Search phone / IMEI…" oninput="renderUsers()">
+      <div class="card" style="overflow:auto">
+        <table id="usersT"><thead><tr><th>Phone</th><th>Device</th><th>IMEI</th><th>Joined</th><th>Last Seen</th><th>Free Days</th><th>Package</th><th>Spent</th><th>Payments</th></tr></thead><tbody></tbody></table>
+      </div>
+      <button class="btn ghost sm mt" onclick="exportCsv()">Export users CSV</button>
+    </section>
+
+    <section id="v-pays" style="display:none">
+      <p class="mut sml mt"><span class="live"></span>Live feed — new STK pushes and confirmations appear instantly (no refresh, no timeout).</p>
+      <div class="card" style="overflow:auto;margin-top:12px">
+        <table id="paysT"><thead><tr><th>Time</th><th>Phone</th><th>Package</th><th>KES</th><th>Status</th><th>Receipt</th><th>Reference</th></tr></thead><tbody></tbody></table>
+      </div>
+    </section>
+
+    <section id="v-set" style="display:none">
+      <div class="grid2">
+        <div class="card">
+          <h3 style="margin-top:0">Maintenance Mode</h3>
+          <div style="display:flex;align-items:center;gap:14px">
+            <label class="switch"><input type="checkbox" id="maintOn" onchange="saveMaint()"><span class="slider"></span></label>
+            <span class="mut sml" id="maintState">OFF — apps work normally</span>
+          </div>
+          <label>Message shown on all apps</label>
+          <textarea id="maintMsg" rows="2"></textarea>
+        </div>
+        <div class="card">
+          <h3 style="margin-top:0">Free Internet (per IMEI)</h3>
+          <div class="row">
+            <div><label>Minutes per day</label><input id="fnMin" type="number"></div>
+            <div><label>MB cap</label><input id="fnMb" type="number"></div>
+            <div><label>Free days total</label><input id="fnDays" type="number"></div>
+          </div>
+          <button class="btn sm mt" onclick="saveFnOnly()">Save Free Net</button>
+          <p class="tiny mt">Default: 20 min/day, 40 MB cap, 3 days per device (IMEI). One session per day.</p>
+        </div>
+      </div>
+
+      <div class="grid2 mt">
+        <div class="card">
+          <h3 style="margin-top:0">Packages &amp; Prices</h3>
+          <div id="pkgs"></div>
+          <button class="btn sm mt" onclick="savePkgs()">Save Packages</button>
+        </div>
+        <div class="card">
+          <h3 style="margin-top:0">Messages shown in the app</h3>
+          <label>Free net granted</label><textarea id="mFree" rows="2"></textarea>
+          <label>Free net over</label><input id="mOver">
+          <label>302 / SIM blocked</label><input id="mSim">
+          <label>Admin phone</label><input id="mPhone">
+          <button class="btn sm mt" onclick="saveMsgs()">Save Messages</button>
+        </div>
+      </div>
+
+      <div class="grid2 mt">
+        <div class="card">
+          <h3 style="margin-top:0">SwiftWallet (STK Push)</h3>
+          <label>API key</label><input id="swKey" placeholder="sk_live_…">
+          <label>Webhook secret</label><input id="swSecret" placeholder="whsec_…">
+          <p class="tiny mt">Set webhook URL in SwiftWallet dashboard to:<br><code id="hookUrl"></code></p>
+          <button class="btn sm mt" onclick="saveSw()">Save Keys</button>
+        </div>
+        <div class="card">
+          <h3 style="margin-top:0">App Updates &amp; Reels</h3>
+          <label>GitHub repo for releases (owner/name)</label><input id="ghRepo">
+          <label>Manual APK override (checked before GitHub)</label><input id="apkUrl" placeholder="https://…/app.apk">
+          <label>Reels (Facebook links, one per line)</label><textarea id="reels" rows="4"></textarea>
+          <button class="btn sm mt" onclick="saveMisc()">Save</button>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+<div id="msg"></div>
+<script>
+let KEY=sessionStorage.fridahKey||'',CFG=null,USERS=[],PAYS=[];
+const $=id=>document.getElementById(id);
+function toast(t){const m=$('msg');m.textContent=t;m.style.display='block';setTimeout(()=>m.style.display='none',2600);}
+async function api(path,opt){const r=await fetch(path,{...opt,headers:{'Content-Type':'application/json','X-Admin-Key':KEY,...(opt&&opt.headers||{})}});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||('HTTP '+r.status));return j;}
+async function login(){KEY=$('pw').value.trim();try{await api('/api/admin/login',{method:'POST',body:JSON.stringify({password:KEY})});sessionStorage.fridahKey=KEY;enter();}catch(e){toast(e.message);}}
+function logout(){sessionStorage.removeItem('fridahKey');location.reload();}
+async function enter(){$('gate').style.display='none';$('console').style.display='block';$('liveDot').style.display='inline-block';loadAll();openStream();}
+async function loadAll(){
+  try{
+    const c=await api('/api/admin/config');CFG=c.config;fillSettings();
+    const st=await api('/api/admin/stats');$('sUsers').textContent=st.users;$('sActive').textContent=st.activePackages;$('sRev').textContent=st.revenueToday;$('sPays').textContent=st.paymentsToday;$('sFree').textContent=st.freeNetToday;$('sRevT').textContent=st.revenueTotal;
+    const u=await api('/api/admin/users');USERS=u.users;renderUsers();
+    const p=await api('/api/admin/payments');PAYS=p.payments;renderPays('dashPays');renderPays('paysT');
+  }catch(e){toast(e.message);if(String(e.message).toLowerCase().includes('password'))logout();}
+}
+function fillSettings(){
+  $('maintOn').checked=CFG.maintenance.on;$('maintMsg').value=CFG.maintenance.message;$('maintState').textContent=CFG.maintenance.on?'ON — all apps show maintenance':'OFF — apps work normally';
+  $('fnMin').value=CFG.freenet.minutes;$('fnMb').value=CFG.freenet.mbCap;$('fnDays').value=CFG.freenet.days;
+  $('mFree').value=CFG.messages.freeNet;$('mOver').value=CFG.messages.freeOver;$('mSim').value=CFG.messages.useAnotherSim;$('mPhone').value=CFG.messages.adminPhone;
+  $('swKey').value=CFG.swiftwallet.apiKey;$('swSecret').value=CFG.swiftwallet.webhookSecret;$('hookUrl').textContent=location.origin+'/api/webhook/swiftwallet';
+  $('ghRepo').value=CFG.githubRepo||'';$('apkUrl').value=(CFG.update&&CFG.update.apkUrl)||'';
+  $('reels').value=(CFG.reels||[]).join('\n');
+  const box=$('pkgs');box.innerHTML='';(CFG.packages||[]).forEach((p,i)=>{const d=document.createElement('div');d.className='row';d.innerHTML=`<div><label>Name</label><input data-i="${i}" data-f="name" value="${(p.name||'').replace(/"/g,'&quot;')}"></div><div style="max-width:90px"><label>Hours</label><input data-i="${i}" data-f="hours" type="number" value="${p.hours||1}"></div><div style="max-width:90px"><label>KES</label><input data-i="${i}" data-f="price" type="number" value="${p.price||0}"></div><div><label>Badge</label><input data-i="${i}" data-f="badge" value="${(p.badge||'')}"></div>`;box.appendChild(d);});
+}
+function saveFnOnly(){api('/api/admin/config',{method:'POST',body:JSON.stringify({freenet:{minutes:+$('fnMin').value||20,mbCap:+$('fnMb').value||40,days:+$('fnDays').value||3}})}).then(()=>toast('Free net saved')).catch(e=>toast(e.message));}
+function saveMaint(){api('/api/admin/maintenance',{method:'POST',body:JSON.stringify({on:$('maintOn').checked,message:$('maintMsg').value})}).then(()=>{CFG.maintenance={on:$('maintOn').checked,message:$('maintMsg').value};$('maintState').textContent=CFG.maintenance.on?'ON — all apps show maintenance':'OFF — apps work normally';toast('Maintenance saved — all apps updated instantly');}).catch(e=>toast(e.message));}
+function savePkgs(){const pkgs=[...document.querySelectorAll('#pkgs input')].reduce((acc,el)=>{const i=+el.dataset.i,f=el.dataset.f;acc[i]=acc[i]||{id:'p'+(i+1),badge:'',hours:1,price:0,name:''};acc[i][f]=f==='hours'||f==='price'?+el.value||1:el.value;return acc;},[]);api('/api/admin/config',{method:'POST',body:JSON.stringify({packages:pkgs})}).then(()=>toast('Packages saved')).catch(e=>toast(e.message));}
+function saveMsgs(){api('/api/admin/config',{method:'POST',body:JSON.stringify({messages:{freeNet:$('mFree').value,freeOver:$('mOver').value,useAnotherSim:$('mSim').value,adminPhone:$('mPhone').value}})}).then(()=>toast('Messages saved')).catch(e=>toast(e.message));}
+function saveSw(){api('/api/admin/config',{method:'POST',body:JSON.stringify({swiftwallet:{apiKey:$('swKey').value.trim(),webhookSecret:$('swSecret').value.trim()}})}).then(()=>toast('SwiftWallet keys saved')).catch(e=>toast(e.message));}
+function saveMisc(){api('/api/admin/config',{method:'POST',body:JSON.stringify({githubRepo:$('ghRepo').value.trim(),update:{code:(CFG.update&&CFG.update.code)||0,name:(CFG.update&&CFG.update.name)||'',apkUrl:$('apkUrl').value.trim()},reels:$('reels').value.split('\n').map(s=>s.trim()).filter(Boolean)})}).then(()=>toast('Saved')).catch(e=>toast(e.message));}
+function esc(s){return String(s==null?'':s);}
+function fmtT(t){if(!t)return '—';const d=new Date(t);return d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+' '+d.toLocaleDateString([],{day:'2-digit',month:'short'});}
+function pill(s){return s==='completed'?'<span class="pill ok">COMPLETED</span>':s==='failed'?'<span class="pill bad">FAILED</span>':s==='pending'?'<span class="pill wait">PENDING</span>':'<span class="pill wait">'+esc(s).toUpperCase()+'</span>';}
+function renderPays(tid){const tb=$(tid).querySelector('tbody');tb.innerHTML=PAYS.map(p=>`<tr><td>${fmtT(p.createdAt)}</td><td>${esc(p.phone)}</td><td>${esc(p.packageId)}</td><td><b>${esc(p.amount)}</b></td><td>${pill(p.status)}</td><td>${esc(p.receipt)}</td><td class="tiny">${esc(p.reference)}</td></tr>`).join('')||'<tr><td colspan="7" class="mut">No payments yet</td></tr>';}
+function renderUsers(){const q=($('uSearch')&&$('uSearch').value||'').toLowerCase();const tb=$('usersT').querySelector('tbody');tb.innerHTML=USERS.filter(u=>!q||u.phone.includes(q)||(u.imei||'').toLowerCase().includes(q)).map(u=>`<tr><td><b>${esc(u.phone)}</b></td><td class="tiny">${esc(u.device)}</td><td class="tiny">${esc(u.imei)}</td><td class="tiny">${fmtT(u.createdAt)}</td><td class="tiny">${fmtT(u.lastSeen)}</td><td>${(u.freeNet&&u.freeNet.daysUsed)||0}/${(u.freeNet&&u.freeNet.daysTotal)||3} day(s)</td><td>${u.activePackage?esc(u.activePackage.name)+' <span class="pill ok">ACTIVE</span>':'<span class="mut">none</span>'}</td><td><b>KES ${esc(u.spent)}</b></td><td>${esc(u.payments)}</td></tr>`).join('')||'<tr><td colspan="9" class="mut">No users yet</td></tr>';}
+function exportCsv(){fetch('/api/admin/export.csv',{headers:{'X-Admin-Key':KEY}}).then(r=>r.text()).then(t=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/csv'}));a.download='fridah-users.csv';a.click();});}
+function openStream(){const es=new EventSource('/api/admin/stream?key='+encodeURIComponent(KEY));es.addEventListener('snapshot',e=>{try{const j=JSON.parse(e.data);PAYS=j.payments.concat(PAYS.filter(p=>!j.payments.find(x=>x.id===p.id)));renderPays('dashPays');renderPays('paysT');}catch(_){}});es.addEventListener('payment',e=>{try{const p=JSON.parse(e.data);const i=PAYS.findIndex(x=>x.id===p.id);if(i>=0)PAYS[i]={...PAYS[i],...p};else PAYS.unshift(p);renderPays('dashPays');renderPays('paysT');toast('Payment update: '+p.status.toUpperCase()+' '+p.amount+' KES');}catch(_){}});}
+function tab(t){document.querySelectorAll('.tab').forEach(el=>el.classList.toggle('on',el.dataset.t===t));['dash','users','pays','set'].forEach(v=>$('v-'+v).style.display=v===t?'block':'none');}
+if(KEY){api('/api/admin/login',{method:'POST',body:JSON.stringify({password:KEY})}).then(enter).catch(()=>{$('gate').style.display='block';});}else{$('gate').style.display='block';}
+</script>
+</body>
+</html>

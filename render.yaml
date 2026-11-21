@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: fridahyobbytech
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    healthCheckPath: /healthz
+    envVars:
+      - key: PUBLIC_URL
+        value: https://fridahyobbytech.onrender.com
+      - key: SWIFTWALLET_API_KEY
+        sync: false
+      - key: SWIFTWALLET_WEBHOOK_SECRET
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: DATA_DIR
+        value: /tmp/fridah-data
