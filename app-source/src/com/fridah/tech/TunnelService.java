@@ -433,8 +433,7 @@ public class TunnelService extends VpnService implements TcpStack.Sink, TcpStack
         try { if (tun != null) tun.close(); } catch (Throwable ignored) { }
         tunIn = null; tunOut = null; tun = null;
         activeCarrier = null;
-        bridgePool.shutdownNow();
-        dnsPool.shutdownNow();
+        // NOTE: bridge/dns pools stay alive so the user can reconnect immediately
         broadcastState(msg == null ? ST_DISCONNECTED : ST_ERROR, msg, code);
         stopForeground(true);
         stopSelf();
